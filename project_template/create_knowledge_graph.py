@@ -1,69 +1,49 @@
-from biocypher import BioCypher, Resource
-from template_package.adapters.example_adapter import (
-    ExampleAdapter,
-    ExampleAdapterNodeType,
-    ExampleAdapterEdgeType,
-    ExampleAdapterProteinField,
-    ExampleAdapterDiseaseField,
-)
+from biocypher import BioCypher
+import os
+from adapters.adapter_1 import GenomicRegionAdapter
+import logging
 
-# Instantiate the BioCypher interface
-# You can use `config/biocypher_config.yaml` to configure the framework or
-# supply settings via parameters below
-bc = BioCypher()
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Download and cache resources (change the directory in the options if needed)
-urls = "https://file-examples.com/wp-content/storage/2017/02/file_example_CSV_5000.csv"
-resource = Resource(
-    name="Example resource",  # Name of the resource
-    url_s=urls,  # URL to the resource(s)
-    lifetime=7,  # seven days cache lifetime
-)
-paths = bc.download(resource)  # Downloads to '.cache' by default
-print(paths)
-# You can use the list of paths returned to read the resource into your adapter
+def main():
+    try:
+        # Create output directory
+        output_dir = "output"
+        os.makedirs(output_dir, exist_ok=True)
 
-# Choose node types to include in the knowledge graph.
-# These are defined in the adapter (`adapter.py`).
-node_types = [
-    ExampleAdapterNodeType.PROTEIN,
-    ExampleAdapterNodeType.DISEASE,
-]
+        # Initialize BioCypher with configuration files
+        bc = BioCypher(
+            schema_config_path=os.path.join('config', 'schema_config.yaml'),
+            biocypher_config_path=os.path.join('config', 'biocypher_config.yaml'),
+        )
 
-# Choose protein adapter fields to include in the knowledge graph.
-# These are defined in the adapter (`adapter.py`).
-node_fields = [
-    # Proteins
-    ExampleAdapterProteinField.ID,
-    ExampleAdapterProteinField.SEQUENCE,
-    ExampleAdapterProteinField.DESCRIPTION,
-    ExampleAdapterProteinField.TAXON,
-    # Diseases
-    ExampleAdapterDiseaseField.ID,
-    ExampleAdapterDiseaseField.NAME,
-    ExampleAdapterDiseaseField.DESCRIPTION,
-]
+        # Initialize the adapter with the BED file path
+        file_path = r"C:\Users\ikrua\Downloads\Telegram Desktop\cCRE-PLS-gene.bed"
+        adapter = GenomicRegionAdapter(file_path)
 
-edge_types = [
-    ExampleAdapterEdgeType.PROTEIN_PROTEIN_INTERACTION,
-    ExampleAdapterEdgeType.PROTEIN_DISEASE_ASSOCIATION,
-]
+        logger.info("Starting to process nodes...")
+        # Write nodes to CSV
+        bc.write_nodes(adapter.get_nodes())
+        
+        logger.info("Starting to process edges...")
+        # Write edges to CSV
+        bc.write_edges(adapter.get_edges())
 
-# Create a protein adapter instance
-adapter = ExampleAdapter(
-    node_types=node_types,
-    node_fields=node_fields,
-    edge_types=edge_types,
-    # we can leave edge fields empty, defaulting to all fields in the adapter
-)
+        # Create the import call file
+        bc.write_import_call()
 
+        logger.info("Knowledge graph creation completed successfully!")
+        
+        # List created files
+        print(f"\nFiles created in the '{output_dir}' directory:")
+        for file in os.listdir(output_dir):
+            print(f"- {file}")
 
-# Create a knowledge graph from the adapter
-bc.write_nodes(adapter.get_nodes())
-bc.write_edges(adapter.get_edges())
+    except Exception as e:
+        logger.error(f"Error creating knowledge graph: {str(e)}")
+        raise
 
-# Write admin import statement
-bc.write_import_call()
-
-# Print summary
-bc.summary()
+if __name__ == "__main__":
+    main()

@@ -1,21 +1,52 @@
-# add your desired knowledge graph components here
-
-protein:
+nodes:
+  GenomicRegion:
     represented_as: node
-    preferred_id: uniprot
-    input_label: uniprot_protein
+    is_a: biolink:GenomicEntity
+    properties:
+      chromosome:
+        type: string
+      start:
+        type: integer
+      end:
+        type: integer
+      accession_e:
+        type: string
+      ccre_type:
+        type: string
+      distance_bp:
+        type: integer
+      source:
+        type: string
+      version:
+        type: string
+      license:
+        type: string
 
-disease:
+  Gene:
     represented_as: node
-    preferred_id: doid
-    input_label: do_disease
+    is_a: biolink:Gene
+    properties:
+      name:
+        type: string
+      source:
+        type: string
+      version:
+        type: string
+      license:
+        type: string
 
-protein interaction:
-    is_a: pairwise molecular interaction
+relationships:
+  RegionToGene:
     represented_as: edge
-    input_label: protein_protein_interaction
-
-protein to disease association:
-    is_a: association
-    represented_as: edge
-    input_label: protein_disease_association
+    source: GenomicRegion
+    target: Gene
+    is_a: biolink:related_to
+    properties:
+      distance_bp:
+        type: integer
+      source:
+        type: string
+      version:
+        type: string
+      license:
+        type: string

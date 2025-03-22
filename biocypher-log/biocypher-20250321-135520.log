@@ -1,0 +1,28 @@
+2025-03-21 13:55:20,624	INFO	module:_logger
+This is BioCypher v0.9.1.
+2025-03-21 13:55:20,625	INFO	module:_logger
+Logging into `biocypher-log\biocypher-20250321-135520.log`.
+2025-03-21 13:55:20,625	DEBUG	module:_create
+Loading module biocypher._create.
+2025-03-21 13:55:20,631	DEBUG	module:_deduplicate
+Loading module biocypher._deduplicate.
+2025-03-21 13:55:22,999	DEBUG	module:_misc
+Loading module biocypher._misc.
+2025-03-21 13:55:23,000	DEBUG	module:_get
+Loading module biocypher._get.
+2025-03-21 13:55:23,001	DEBUG	module:_mapping
+Loading module biocypher._mapping.
+2025-03-21 13:55:23,224	DEBUG	module:_ontology
+Loading module biocypher._ontology.
+2025-03-21 13:55:23,238	DEBUG	module:_translate
+Loading module biocypher._translate.
+2025-03-21 13:55:23,558	DEBUG	module:_neo4j_driver
+Loading module biocypher.output.connect._neo4j_driver.
+2025-03-21 13:55:23,558	DEBUG	module:_get_connector
+Loading module biocypher.output.connect._get_connector.
+2025-03-21 13:55:26,419	DEBUG	module:_get_in_memory_kg
+Loading module biocypher.output.in_memory._get_in_memory_kg.
+2025-03-21 13:55:26,461	DEBUG	module:_get_writer
+Loading module biocypher.output.write._get_writer.
+2025-03-21 13:55:26,461	DEBUG	module:_core
+Loading module biocypher._core.
