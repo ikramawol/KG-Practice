@@ -1,9 +1,6 @@
 nodes:
   GenomicRegion:
     represented_as: node
-    preferred_id: SO:0000001
-    label_in_input: "GenomicRegion"
-    # id_prefix: GR
     is_a: biolink:GenomicEntity
     properties:
       chromosome:
@@ -27,9 +24,6 @@ nodes:
 
   Gene:
     represented_as: node
-    preferred_id: SO:0000704  
-    label_in_input: "Gene"
-    # id_prefix: GENE
     is_a: biolink:Gene
     properties:
       name:
@@ -46,7 +40,6 @@ relationships:
     represented_as: edge
     source: GenomicRegion
     target: Gene
-    label_in_input: RegionToGene
     is_a: biolink:related_to
     properties:
       distance_bp:
